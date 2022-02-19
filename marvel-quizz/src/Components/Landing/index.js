@@ -18,14 +18,31 @@ const Landing = () => {
 
     const [btn, setBtn] = useState(false)
 
+    const setleftImg = ()=>{
+        refWolverine.current.classList.add('leftImg')
+    }
+    const setrightImg =()=>{
+        refWolverine.current.classList.add('rightImg')
+
+    }
+    const clearImg =()=>{
+        if (refWolverine.current.classList.contains('leftImg')) {
+            refWolverine.current.classList.remove('leftImg')
+        }else if(refWolverine.current.classList.contains('rightImg')){
+            refWolverine.current.classList.remove('rightImg')
+
+        }
+    }
+
+
     //si le btn = true
     const displayBtn =  btn && (
         <Fragment>
-            <div className='leftBox'>
+            <div onMouseOver={setleftImg} onMouseOut={clearImg} className='leftBox'>
                 <button className='btn-welcome'>inscription</button>
             </div>
             <div className='rightBox'>
-                <button className='btn-welcome'>connexion</button>
+                <button onMouseOver={setrightImg} onMouseOut={clearImg} className='btn-welcome'>connexion</button>
             </div>
         </Fragment>
 
