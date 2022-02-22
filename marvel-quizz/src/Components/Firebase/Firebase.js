@@ -1,4 +1,8 @@
-import app from "firebase/app"; 
+import { initializeApp, } from 'firebase/app';
+import firebase from 'firebase/compat/app';
+
+import 'firebase/compat/auth';
+
 
 const Config = {
 
@@ -8,14 +12,35 @@ const Config = {
     storageBucket: "fafa-marvel-quizz.appspot.com",
     messagingSenderId: "823849643946",
     appId: "1:823849643946:web:32e32f5f696ad6643d85d3",
-    measurementId: "G-9DXQER0R8E" 
-  };
-  
+    measurementId: "G-9DXQER0R8E"
+};
+
 class Firebase {
-    constructor(Config){
-        app.initializeApp()
+    constructor() {
+        firebase.initializeApp(Config);
+        this.auth = firebase.auth()
     }
-  
+
+    //inscription
+    signupuser = (email, password) => {
+        this.auth.createUserWithEmailAndPassword(email, password);
+
+    }
+    //connexion
+
+    loginuser=(email, password)=>{
+        this.auth.signInWithEmailAndPassword(email, password)
+    }
+
+    //deconnexion
+    signoutuser =()=>{
+        this.auth.signOut()
+    }
+
+
+
+    
+
 }
 
 export default Firebase
