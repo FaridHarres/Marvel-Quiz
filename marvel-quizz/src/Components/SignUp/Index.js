@@ -1,8 +1,6 @@
 import React, {useState, useContext} from 'react'
 import FirebaseContext from '../Firebase/Context'
 import { Link } from 'react-router-dom'
-import Firebase from '../Firebase/Firebase'
-import firebase from 'firebase/compat/app';
 
 
 
