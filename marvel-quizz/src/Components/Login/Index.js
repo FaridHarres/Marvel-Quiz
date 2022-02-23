@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import FirebaseContext from '../Firebase/Context'
+import { useNavigate  } from 'react-router'
 
 
 
 const Login = (props) => {
+  const history = useNavigate ()
 
   const firebase = useContext(FirebaseContext)
   
@@ -36,7 +38,7 @@ const Login = (props) => {
     .then(user=>{
       setemail('');
       setpassword('');
-      props.history.push('/welcome') // ce sont les props lors de la route dans app.js 
+      history('/welcome') // ce sont les props lors de la route dans app.js 
 console.log(email)
     })
     .catch(error =>{
