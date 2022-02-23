@@ -1,10 +1,14 @@
 import React, {useState, useContext} from 'react'
 import FirebaseContext from '../Firebase/Context'
 import { Link } from 'react-router-dom'
+import { useNavigate  } from 'react-router'
+
 
 
 
 const Signup = (props) => {
+
+  const history = useNavigate ()
 
 
 
@@ -24,6 +28,7 @@ const Signup = (props) => {
   const handleChange =(e)=>{
     setloginData({...loginData, [e.target.id]: e.target.value});
   }
+  // const firebase = new Firebase();
 
   const handleSubmit =(e)=>{
     e.preventDefault();
@@ -31,8 +36,10 @@ const Signup = (props) => {
     //jappel mon objet firebase (context)
     firebase.signupuser(email, password)
     .then(user =>{
+      
+
       setloginData({... data})//vider la variable d'etat
-      props.history.push('/welcome') // ce sont les props lors de la route dans app.js 
+      history('/welcome') // ce sont les props lors de la route dans app.js 
     }).catch(error =>{
       seterror(error)
       setloginData({... data})//vider la variable d'etat

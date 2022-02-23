@@ -1,6 +1,5 @@
-import firebase from 'firebase/compat/app';
-
-import 'firebase/compat/auth';
+import app from 'firebase/app'
+import 'firebase/auth';
 
 
 const Config = {
@@ -16,25 +15,25 @@ const Config = {
 
 class Firebase {
     constructor() {
-        firebase.initializeApp(Config);
-        this.auth = firebase.auth()
+        app.initializeApp(Config);
+        this.auth = app.auth();
     }
 
     //inscription
-    signupuser = (email, password) => {
-        this.auth.createUserWithEmailAndPassword(email, password);
+    signupuser = (email, password) => 
+        this.auth.createUserWithEmailAndPassword(email, password)
 
-    }
+    
     //connexion
 
-    loginuser=(email, password)=>{
+    loginuser=(email, password)=>
         this.auth.signInWithEmailAndPassword(email, password)
-    }
+    
 
     //deconnexion
-    signoutuser =()=>{
+    signoutuser =()=>
         this.auth.signOut()
-    }
+    
 
 
 
