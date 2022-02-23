@@ -39,7 +39,6 @@ const Login = (props) => {
       setemail('');
       setpassword('');
       history('/welcome') // ce sont les props lors de la route dans app.js 
-console.log(email)
     })
     .catch(error =>{
       seterror(error);
