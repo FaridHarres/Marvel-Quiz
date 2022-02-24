@@ -1,14 +1,14 @@
-import React, {useState, useContext} from 'react'
+import React, { useState, useContext } from 'react'
 import FirebaseContext from '../Firebase/Context'
 import { Link } from 'react-router-dom'
-import { useNavigate  } from 'react-router'
+import { useNavigate } from 'react-router'
 
 
 
 
 const Signup = (props) => {
 
-  const history = useNavigate ()
+  const history = useNavigate()
 
 
 
@@ -16,45 +16,50 @@ const Signup = (props) => {
   // console.log(firebase)
 
   const data = {
-    pseudo : '',
-    email :'',
+    pseudo: '',
+    email: '',
     password: '',
     confirmPassword: ''
   }
 
   const [loginData, setloginData] = useState(data);
   const [error, seterror] = useState('')
-  
-  const handleChange =(e)=>{
-    setloginData({...loginData, [e.target.id]: e.target.value});
+
+  const handleChange = (e) => {
+    setloginData({ ...loginData, [e.target.id]: e.target.value });
   }
   // const firebase = new Firebase();
 
-  const handleSubmit =(e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password} = loginData;
+    const { email, password, pseudo } = loginData;
     //jappel mon objet firebase (context)
     firebase.signupuser(email, password)
-    .then(user =>{
-      
+    .then((authUser)=>{
+      return firebase.user(authUser.user.uid).set({
+        pseudo,
+       email
+      })
 
-      setloginData({... data})//vider la variable d'etat
-      history('/welcome') // ce sont les props lors de la route dans app.js 
-    }).catch(error =>{
-      seterror(error)
-      setloginData({... data})//vider la variable d'etat
     })
+      .then(() => {
+        setloginData({ ...data })//vider la variable d'etat
+        history('/welcome') // ce sont les props lors de la route dans app.js 
+      }).catch(error => {
+        seterror(error)
+        setloginData({ ...data })//vider la variable d'etat
+      })
 
   }
 
   //faire le destructuring pour acceder au data 
-  const {pseudo, email, password, confirmPassword} = loginData;
+  const { pseudo, email, password, confirmPassword } = loginData;
 
-  const btn = pseudo === '' || email === '' ||password === ''|| password !== confirmPassword ? <button disabled>Iscription</button> : <button>iscription</button>
+  const btn = pseudo === '' || email === '' || password === '' || password !== confirmPassword ? <button disabled>Iscription</button> : <button>iscription</button>
 
 
   //gestion des erreurs
-  const errorMsg = error!==''&& <span>{error.message}</span>
+  const errorMsg = error !== '' && <span>{error.message}</span>
   return (
     <div className='signUpLoginBox'>
       <div className='slContainer'>
@@ -68,7 +73,7 @@ const Signup = (props) => {
             <form onSubmit={handleSubmit}>
 
               <div className='inputBox'>
-                <input onChange={handleChange} value={pseudo} type="text" id="pseudo"  required />
+                <input onChange={handleChange} value={pseudo} type="text" id="pseudo" required />
                 <label htmlFor="pseudo">Pseudo</label>
 
               </div>
@@ -77,11 +82,11 @@ const Signup = (props) => {
                 <label htmlFor="email">Email</label>
               </div>
               <div className='inputBox'>
-                <input onChange={handleChange} value={password}type="password" id="password" autoComplete="off" required />
+                <input onChange={handleChange} value={password} type="password" id="password" autoComplete="off" required />
                 <label htmlFor="password">Mot de passe</label>
               </div>
               <div className='inputBox'>
-                <input onChange={handleChange} value={confirmPassword}type="password" id="confirmPassword" autoComplete="off" required />
+                <input onChange={handleChange} value={confirmPassword} type="password" id="confirmPassword" autoComplete="off" required />
                 <label htmlFor="confirmPassword">Confirmer votre Mot de passe</label>
               </div>
 
