@@ -7,6 +7,7 @@ import Login from '../Login/Index';
 import Signup from '../SignUp/Index';
 import Errorpage from '../ErrorPage/Index';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ForgetPassword from '../Forgetpassword/Index';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
         <Route path='/login' element={<Login/>} />
         <Route path='/signup' element={<Signup/>} />
+        <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
         <Route path='*' element={<Errorpage />} />
 
       </Routes>
