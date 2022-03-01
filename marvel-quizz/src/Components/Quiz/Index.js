@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import Levels from '../Levels/Index';
 import ProgressBar from '../ProgressBar/Index';
 import { QuizMarvel } from '../quizMarvel/Index';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
+
+toast.configure();
 
 class Quiz extends Component {
 
@@ -15,7 +20,8 @@ class Quiz extends Component {
     idQuestion: 0,
     btnDisabled: true,
     userAnswer: null,
-    score: 0
+    score: 0,
+    showWelcomemsg: false
   }
 
   storedDataRef = React.createRef();
@@ -32,6 +38,25 @@ class Quiz extends Component {
     } else {
       console.log("pas assez de qst")
     }
+  }
+
+  showWelcomemsg=(pseudo)=>{
+
+    if(!this.state.showWelcomemsg){
+      this.setState({
+        showWelcomemsg: true
+      })
+      toast.warn(`Bienvenue ${pseudo}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        });
+
+    }
+   
   }
 
   //methode de cycle de vie
@@ -60,7 +85,16 @@ class Quiz extends Component {
 
       })
     }
+    if(this.props.userData.pseudo){
+      this.showWelcomemsg(this.props.userData.pseudo)
+    }
+
   }
+
+
+
+
+
   nextQuestion=()=>{
     if(this.state.idQuestion === this.state.maxQuestions -1){
 
@@ -77,6 +111,26 @@ class Quiz extends Component {
         score: prevState.score +1
         //il faut allimenter le component did update
       }))
+      toast.success('Bravo +1!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        bodyClassName: "grow-font-size"
+        });
+    }else{
+      toast.error('Mauvaise reponse ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
 
   }
@@ -106,7 +160,9 @@ class Quiz extends Component {
         <h2> {this.state.question}</h2>
         {displayoption}
 
-        <button className='btnSubmit' disabled={this.state.btnDisabled} onClick={this.nextQuestion}>Suivant</button>
+        <button className='btnSubmit' disabled={this.state.btnDisabled} onClick={this.nextQuestion}>
+          Suivant
+          </button>
 
       </div>
     )
