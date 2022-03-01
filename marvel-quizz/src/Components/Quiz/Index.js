@@ -119,7 +119,7 @@ class Quiz extends Component {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        bodyClassName: "grow-font-size"
+        bodyClassName: "grow-font-size",
         });
     }else{
       toast.error('Mauvaise reponse ', {
