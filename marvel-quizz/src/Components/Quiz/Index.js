@@ -205,7 +205,7 @@ class Quiz extends Component {
       <QuizOver ref={this.storedDataRef} levelNames={this.state.levelNames} score={this.state.score} maxQuestions={this.state.maxQuestions} quizLevel={this.state.quizLevel} percent={this.state.percent} loadLevelQst={this.loadLevelQst}/>
     ) : (
       <Fragment>
-      <Levels />
+      <Levels levelNames={this.state.levelNames} quizLevel={this.state.quizLevel}/>
       <ProgressBar idQuestion={this.state.idQuestion} maxQuestions={this.state.maxQuestions} />
 
       <h2> {this.state.question}</h2>
