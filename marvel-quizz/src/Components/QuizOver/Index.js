@@ -24,21 +24,53 @@ const QuizOver = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         setasked(ref.current)
+
+        if (localStorage.getItem('marvelStorageDate')) {
+            const date = localStorage.getItem('marvelStorageDate')
+            checkDataAge(date)
+        }
     }, [ref])
+
+    const checkDataAge = (date) => {
+        const today = Date.now();
+        const timedif = today - date;
+
+       const daysDif= timedif / (1000* 3600* 24)
+
+       if(daysDif>= 15){
+           localStorage.clear();
+           localStorage.setItem('marvelStorageDate', Date.now());
+           
+       }
+    }
 
     const averaGrade = maxQuestions / 2
 
     const showModal = (id) => {
         setOpenModal(true)
-
-        axios.get(`https://gateway.marvel.com:443/v1/public/characters/${id}?ts=1&apikey=${API_PUBLIC_KEY}&hash=${hash}
-        `).then((response) => {
-            setCharacterData(response.data);
+        if (localStorage.getItem(id)) {
+            setCharacterData(JSON.parse(localStorage.getItem(id)));
             setLoading(false)
 
-        }).catch((error) =>
-            console.log(error)
-        )
+
+        } else {
+
+            axios.get(`https://gateway.marvel.com:443/v1/public/characters/${id}?ts=1&apikey=${API_PUBLIC_KEY}&hash=${hash}
+            `).then((response) => {
+                setCharacterData(response.data);
+                setLoading(false)
+
+                localStorage.setItem(id, JSON.stringify(response.data));
+                if (!localStorage.getItem('marvelStorageDate')) {
+
+                    localStorage.setItem('marvelStorageDate', Date.now());
+                }
+
+            }).catch((error) =>
+                console.log(error)
+            )
+        }
+
     }
     const hideModal = () => {
         setOpenModal(false)
@@ -120,10 +152,27 @@ const QuizOver = React.forwardRef((props, ref) => {
                 <h2>{characterData.data.results[0].name}</h2>
             </div>
             <div className='modalBody'>
-                <h3>titre2</h3>
+                <div className='comicImage'>
+                    <img src={characterData.data.results[0].thumbnail.path+'.'+characterData.data.results[0].thumbnail.extension}/>
+                    {characterData.attributionText}
+                </div>
+                <div className='comicDetails'>
+                    <h3>Description</h3>
+                    {
+                        characterData.data.results[0].description ? <p>{characterData.data.results[0].description }</p> : <p>Description indisponible</p>
+                    }
+                    <h3>Plus d'info</h3>
+                    {
+                        characterData.data.results[0].urls && 
+                        characterData.data.results[0].urls.map((url, index)=>{
+                            return <a key={index} href={url.url} target='_blank' rel='noopener noreferrer'>{url.type}</a>
+                        })
+
+                    }
+                </div>
             </div>
             <div className='modalFooter'>
-                <button className='modalBtn'>Fermer</button>
+                <button className='modalBtn' onClick={hideModal}>Fermer</button>
             </div>
         </Fragment>
     ) : (
