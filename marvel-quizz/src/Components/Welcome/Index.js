@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, Fragment } from 'react'
 import FirebaseContext from '../Firebase/Context'
 import { useNavigate } from 'react-router'
-
+import Loader from '../Loader/Index'
 import Logout from '../Logout/Index'
 import Quiz from '../Quiz/Index'
 
@@ -14,7 +14,7 @@ const Welcome = () => {
   const [userData, setuserData] = useState({})
 
   const firebase = useContext(FirebaseContext)
-  
+
 
   useEffect(() => {
     let listerner = firebase.auth.onAuthStateChanged(user => { //si un user est autentifier nous allons le setUser, en revanche si aucun user n'est authentifier nous allons les rediriger vers la page daccueil
@@ -47,18 +47,17 @@ const Welcome = () => {
 
 
   return userSession === null ? (
-      <Fragment>
-        <div className="loader" ></div>
-        <p>Loading ... </p>
-      </Fragment>
-    ) : (
-      <div className='quiz-bg'>
-        <div className='container'>
-          <Logout />
-          <Quiz userData={userData} />
-        </div>
 
+    <Loader loadingMsg={"Authentification"} styling={{ textAlign: 'center', color: '#ffffff' }} />
+
+  ) : (
+    <div className='quiz-bg'>
+      <div className='container'>
+        <Logout />
+        <Quiz userData={userData} />
       </div>
+
+    </div>
 
   )
 
