@@ -1,7 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Levels from '../Levels/Index';
 import ProgressBar from '../ProgressBar/Index';
 import { QuizMarvel } from '../quizMarvel/Index';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import QuizOver from '../QuizOver/Index'
+
+toast.configure();
 
 class Quiz extends Component {
 
@@ -15,7 +20,9 @@ class Quiz extends Component {
     idQuestion: 0,
     btnDisabled: true,
     userAnswer: null,
-    score: 0
+    score: 0,
+    showWelcomemsg: false,
+    quizEnd: false
   }
 
   storedDataRef = React.createRef();
@@ -32,6 +39,25 @@ class Quiz extends Component {
     } else {
       console.log("pas assez de qst")
     }
+  }
+
+  showWelcomemsg = (pseudo) => {
+
+    if (!this.state.showWelcomemsg) {
+      this.setState({
+        showWelcomemsg: true
+      })
+      toast.warn(`Bienvenue ${pseudo}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+      });
+
+    }
+
   }
 
   //methode de cycle de vie
@@ -51,7 +77,7 @@ class Quiz extends Component {
       })
 
     }
-    if(this.state.idQuestion !== prevState.idQuestion){
+    if (this.state.idQuestion !== prevState.idQuestion) {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
@@ -60,23 +86,53 @@ class Quiz extends Component {
 
       })
     }
-  }
-  nextQuestion=()=>{
-    if(this.state.idQuestion === this.state.maxQuestions -1){
+    if (this.props.userData.pseudo) {
+      this.showWelcomemsg(this.props.userData.pseudo)
+    }
 
-    }else{
-      this.setState((prevState)=>({
+  }
+
+
+
+
+
+  nextQuestion = () => {
+    if (this.state.idQuestion === this.state.maxQuestions - 1) {
+      // console.log("gameover")
+      this.gameOver()
+    } else {
+      this.setState((prevState) => ({
         idQuestion: prevState.idQuestion + 1
 
       }))
     }
 
     const goodAnswer = this.storedDataRef.current[this.state.idQuestion].answer;
-    if(this.state.userAnswer === goodAnswer){
-      this.setState((prevState)=>({
-        score: prevState.score +1
+    if (this.state.userAnswer === goodAnswer) {
+      this.setState((prevState) => ({
+        score: prevState.score + 1
         //il faut allimenter le component did update
       }))
+      toast.success('Bravo +1!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        bodyClassName: "grow-font-size",
+      });
+    } else {
+      toast.error('Mauvaise reponse ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
 
   }
@@ -87,6 +143,13 @@ class Quiz extends Component {
       btnDisabled: false
     })
   }
+
+  gameOver = () => {
+    this.setState({
+      quizEnd: true
+    })
+  }
+
   render() {
 
     // const {pseudo}=this.props.userData;
@@ -98,17 +161,25 @@ class Quiz extends Component {
         </p>
       )
     })
-    return (
-      <div>
-        <Levels />
-        <ProgressBar />
 
-        <h2> {this.state.question}</h2>
-        {displayoption}
+    return (this.state.quizEnd ?(
+      <QuizOver />
+    ) : (
+      <Fragment>
+      <Levels />
+      <ProgressBar idQuestion={this.state.idQuestion} maxQuestions={this.state.maxQuestions} />
 
-        <button className='btnSubmit' disabled={this.state.btnDisabled} onClick={this.nextQuestion}>Suivant</button>
+      <h2> {this.state.question}</h2>
+      {displayoption}
 
-      </div>
+      <button className='btnSubmit' disabled={this.state.btnDisabled} onClick={this.nextQuestion}>
+        {this.state.idQuestion < this.state.maxQuestions -1 ? "suivant" : "terminer"}
+      </button>
+
+    </Fragment>
+    )
+  
+     
     )
   }
 }
