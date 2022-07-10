@@ -55,7 +55,7 @@ const Signup = (props) => {
   //faire le destructuring pour acceder au data 
   const { pseudo, email, password, confirmPassword } = loginData;
 
-  const btn = pseudo === '' || email === '' || password === '' || password !== confirmPassword ? <button disabled>Iscription</button> : <button>iscription</button>
+  const btn = pseudo === '' || email === '' || password === '' || password !== confirmPassword ? <button disabled>Inscription</button> : <button>inscription</button>
 
 
   //gestion des erreurs
