@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, Fragment } from 'react'
 import FirebaseContext from '../Firebase/Context'
 import { useNavigate } from 'react-router'
-import Loader from '../Loader/Index'
+import Loader from  '../Loader/Index'
 import Logout from '../Logout/Index'
 import Quiz from '../Quiz/Index'
 
@@ -11,7 +11,7 @@ const Welcome = () => {
   const history = useNavigate()
 
   const [userSession, setUserSession] = useState(null);
-  const [userData, setuserData] = useState({})
+  const [userData, setuserData] =  useState({})
 
   const firebase = useContext(FirebaseContext)
 
