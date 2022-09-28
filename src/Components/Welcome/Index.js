@@ -3,7 +3,7 @@ import FirebaseContext from '../Firebase/Context'
 import { useNavigate } from 'react-router'
 import Loader from  '../Loader/Index'
 import Logout from  '../Logout/Index'
-import Quiz from '../Quiz/Index'
+import Quiz from ' ../Quiz/Index'
 
 
 const Welcome = () => {
