@@ -10,7 +10,7 @@ const Welcome = () => {
 
   const history = useNavigate()
 
-  const [userSession, setUserSession] = useState(null);
+  const [userSession, setUserSession] =  useState(null);
   const [userData, setuserData] =  useState({})
 
   const firebase = useContext(FirebaseContext)
